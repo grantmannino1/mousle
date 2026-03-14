@@ -1,0 +1,286 @@
+# 🧠 MouseWordle
+
+A daily mouse brain neuroanatomy guessing game, inspired by Wordle and your friend's human brain version.
+
+Players identify a mystery 3D brain region from the **Allen Mouse Brain Atlas CCFv3**, receiving feedback on:
+- **Distance** in mm from their guess to the target
+- **Proximity %** — how close they are (0% = far, 100% = correct)
+- **Anatomical direction** — Anterior/Posterior, Dorsal/Ventral, Medial/Lateral
+
+---
+
+## 📁 Project Structure (Overview)
+
+```
+mousewordle/
+├── public/data/regions.json    ← All brain regions database (already filled in!)
+├── src/
+│   ├── app/
+│   │   ├── page.tsx            ← Main game page
+│   │   ├── layout.tsx          ← HTML shell
+│   │   └── api/mesh/route.ts   ← Proxy for Allen Atlas 3D meshes
+│   ├── components/             ← All UI pieces
+│   │   ├── BrainViewer.tsx     ← 3D Three.js viewer (the centerpiece)
+│   │   ├── GuessInput.tsx      ← Autocomplete search box
+│   │   ├── GuessHistory.tsx    ← Table of past guesses
+│   │   ├── DirectionIndicator  ← Direction arrows
+│   │   ├── ProximityBar.tsx    ← Colored proximity bar
+│   │   └── ...modals
+│   ├── hooks/useGame.ts        ← Main game logic hook
+│   ├── lib/
+│   │   ├── regions.ts          ← Load + search regions
+│   │   ├── daily.ts            ← Pick today's puzzle
+│   │   ├── distance.ts         ← Calculate distance & direction
+│   │   └── share.ts            ← Generate share text
+│   ├── store/gameStore.ts      ← Global state (Zustand)
+│   └── types/index.ts          ← TypeScript types
+```
+
+---
+
+## 🚀 Getting Started (Step by Step)
+
+### Prerequisites
+
+You need:
+1. **Node.js** (version 18 or higher) — download from https://nodejs.org
+2. **A terminal** — Terminal on Mac, Command Prompt or PowerShell on Windows
+
+### Step 1: Install Node.js
+
+Go to https://nodejs.org and download the **LTS** version. Install it like any normal app.
+
+To verify it worked, open Terminal and type:
+```bash
+node --version
+# Should print something like: v20.11.0
+```
+
+### Step 2: Navigate to the project folder
+
+```bash
+# On Mac:
+cd ~/path/to/mousewordle
+
+# On Windows:
+cd C:\Users\YourName\path\to\mousewordle
+```
+
+### Step 3: Install dependencies
+
+```bash
+npm install
+```
+
+This downloads all the libraries (React, Three.js, etc.). It will take 1–2 minutes.
+
+### Step 4: Run the development server
+
+```bash
+npm run dev
+```
+
+You should see output like:
+```
+▲ Next.js 14.x.x
+- Local: http://localhost:3000
+```
+
+### Step 5: Open the game
+
+Open your browser and go to: **http://localhost:3000**
+
+You should see MouseWordle running! 🎉
+
+---
+
+## 🎮 How the Game Works (Technical)
+
+### Daily Puzzle Selection
+- Every day a new region is chosen **deterministically** from the date
+- Same date + same difficulty → always same region (no server needed)
+- Logic lives in `src/lib/daily.ts`
+
+### Distance Calculation
+- All regions have a **centroid** in Allen CCFv3 voxel space (25µm resolution)
+- Distance is Euclidean centroid-to-centroid, converted to mm
+- Directions derived from the X/Y/Z axis differences
+- Logic lives in `src/lib/distance.ts`
+
+### 3D Mesh Rendering
+- Currently shows a **placeholder sphere** — see "Adding Real Meshes" below
+- 3D viewer uses **React Three Fiber** (a React wrapper for Three.js)
+- Camera auto-rotates slowly; drag to control manually
+
+---
+
+## 🧩 Adding Real 3D Brain Meshes (Optional but Recommended)
+
+The 3D viewer currently shows a coral sphere as a placeholder. To show real brain region shapes:
+
+### Option A: Download from Allen Institute (Easiest)
+
+1. Go to: https://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/
+2. Download the `structure_meshes.zip` file (~500MB)
+3. Unzip it — you'll find `.obj` files named by Allen structure ID (e.g., `1080.obj` = hippocampus)
+4. Convert them to `.glb` format (smaller, faster to load):
+
+```bash
+# Install conversion tool
+npm install -g obj2gltf
+
+# Convert each file (example for hippocampus, Allen ID 1080)
+obj2gltf -i 1080.obj -o 1080.glb
+```
+
+5. Copy the `.glb` files to `/public/meshes/`
+6. Update `BrainViewer.tsx` — replace the placeholder sphere with:
+
+```tsx
+// In BrainViewer.tsx, replace RegionMesh component with:
+import { useGLTF } from '@react-three/drei';
+
+function RegionMesh({ allenId, color, opacity = 1 }: RegionMeshProps) {
+  const { scene } = useGLTF(`/meshes/${allenId}.glb`);
+  // Clone and recolor the mesh
+  const cloned = scene.clone();
+  cloned.traverse((child: any) => {
+    if (child.isMesh) {
+      child.material = new THREE.MeshStandardMaterial({
+        color, opacity, transparent: opacity < 1,
+        roughness: 0.6, metalness: 0.1,
+      });
+    }
+  });
+  return <primitive object={cloned} />;
+}
+```
+
+### Option B: Use the Allen API Proxy (Automatic)
+
+The file `src/app/api/mesh/route.ts` already sets up a proxy to fetch meshes from the Allen Brain Atlas API on demand. You don't need to download anything — the meshes load automatically when a region is displayed.
+
+However, the Allen API returns `.obj` format which requires a different loader (OBJLoader) than the default GLB loader. To enable this:
+
+```bash
+npm install three-obj-loader
+```
+
+Then in `BrainViewer.tsx`, replace the placeholder with an OBJLoader fetch from `/api/mesh?id={allenId}`.
+
+---
+
+## 🎨 Customizing the Game
+
+### Adding More Regions
+
+Edit `public/data/regions.json`. Each region needs:
+
+```json
+{
+  "id": "unique-string-id",
+  "allenId": 12345,        // Allen CCFv3 structure ID
+  "name": "Full Region Name",
+  "abbreviation": "ABBR",
+  "difficulty": "easy",    // "easy", "medium", or "hard"
+  "category": "cortex",    // cortex, subcortical, cerebellum, brainstem, olfactory, fiber
+  "parentName": "Parent Structure",
+  "centroid_ccf": [228, 120, 230],  // [X, Y, Z] in 25µm CCF voxels
+  "fun_fact": "Optional interesting fact",
+  "aliases": ["other name", "abbreviation"]
+}
+```
+
+**To find Allen IDs and centroids:**
+1. Go to https://atlas.brain-map.org
+2. Search for your region
+3. The URL will contain the structure ID
+4. Centroid: use the Allen Brain Atlas API: `https://api.brain-map.org/api/v2/data/Structure/query.json?criteria=acronym%3D'CA1'`
+
+### Changing Difficulty Thresholds
+
+In `src/lib/regions.ts`, the `filterByDifficulty` function controls which regions appear in each tier. Currently:
+- Easy: only "easy" tagged regions
+- Medium: easy + medium regions  
+- Hard: all regions
+
+### Changing the Color Scheme
+
+Edit `tailwind.config.ts`. Key colors:
+- `synapse`: teal accent (#4af0c4)
+- `neuron`: region mesh color (#f06060)
+- `lab-bg`: background (#0d0f14)
+
+---
+
+## 🚢 Deploying to the Web (Vercel — Free)
+
+1. Push your code to GitHub
+2. Go to https://vercel.com and sign up (free)
+3. Click "New Project" and import your GitHub repo
+4. Click "Deploy" — that's it!
+
+Vercel automatically handles the Next.js build and gives you a URL like `mousewordle.vercel.app`.
+
+---
+
+## 🐛 Common Issues
+
+### "Module not found" error
+Run `npm install` again. Sometimes packages don't install completely.
+
+### "Cannot read properties of null" in the 3D viewer
+This is normal during initial load — the target region loads asynchronously. The error goes away once regions.json is fetched.
+
+### The 3D viewer shows a sphere instead of a real brain shape
+This is the placeholder. See "Adding Real 3D Brain Meshes" above.
+
+### The game picks the same region every day
+That's intentional! The daily puzzle is deterministic. To reset for testing, open browser DevTools → Application → Local Storage → delete the `mousewordle-state` key.
+
+### TypeScript errors
+```bash
+npm run lint
+```
+This shows all type errors. Most are fixable by following the error messages.
+
+---
+
+## 📊 Technical Stack
+
+| Technology | Purpose |
+|-----------|---------|
+| **Next.js 14** | React framework, handles routing + API routes |
+| **React Three Fiber** | React bindings for Three.js (3D rendering) |
+| **@react-three/drei** | Helpers: OrbitControls, Bounds, Center, etc. |
+| **Three.js** | 3D graphics library |
+| **Zustand** | Lightweight state management (game state) |
+| **Tailwind CSS** | Utility-first CSS |
+| **TypeScript** | Type safety |
+
+---
+
+## 🧠 Data Source
+
+All brain regions sourced from the **Allen Mouse Brain Common Coordinate Framework v3 (CCFv3)**:
+
+> Wang Q, et al. "The Allen Mouse Brain Common Coordinate Framework: A 3D Reference Atlas." Cell. 2020.
+> https://doi.org/10.1016/j.cell.2020.04.007
+
+The atlas is freely available at https://atlas.brain-map.org under a Creative Commons Attribution license.
+
+---
+
+## 🤝 Extending the Project
+
+Ideas for future features:
+
+- **Pre-computed distance table** — Run Python scripts (see your friend's design doc) to compute real boundary-to-boundary distances instead of centroid Euclidean distance
+- **MRI slice overlay** — Show a coronal/axial/sagittal slice behind the 3D mesh (use Allen's 10µm MRI template)
+- **Expert mode** — Add all ~1000 Allen CCFv3 structures
+- **Multiplayer** — Add a custom puzzle URL that encodes the region ID for sharing challenges
+- **Mobile optimization** — The Three.js viewer works on touch; the main layout could be more compact on phones
+
+---
+
+*Built for neuroscience education. All atlas data © Allen Institute for Brain Science.*
