@@ -1,174 +1,109 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import type { GameState, Region, GuessResult, PlayerStats, DistanceMap } from '@/types';
-import { getGuessResult } from '@/lib/distance';
-import { getTodayString } from '@/lib/daily';
+// ============================================================
+//  lib/distance.ts
+// ============================================================
 
-interface Store extends GameState {
-    setDifficulty: (d: 'easy' | 'medium' | 'hard') => void;
-    setTargetRegion: (r: Region) => void;
-    submitGuess: (region: Region) => void;
-    submitGuessWithData: (region: Region, distanceData: DistanceMap) => void;
-    openModal: (m: GameState['activeModal']) => void;
-    closeModal: () => void;
-    resetGame: () => void;
-    lastPlayedDate: string;
-    stats: PlayerStats;
+import type {
+    Region,
+    GuessResult,
+    AnatomicalDirection,
+    DistanceMap,
+} from '@/types';
+
+const VOXEL_TO_MM = 0.025;
+
+// Effective maximum distance for proximity scaling.
+// Mouse brain is ~11mm AP × 8mm DV × 11mm LR.
+// Using 8mm so the scale feels meaningful:
+//   0mm  → 100% (correct)
+//   1mm  →  88% (very close, same subregion)
+//   2mm  →  75% (adjacent region)
+//   3mm  →  44% (wrong area, feels far — uses square falloff)
+//   5mm  →  10% (opposite end of brain)
+//   8mm+ →   0%
+const MAX_BRAIN_DISTANCE_MM = 8;
+
+function euclideanDistanceMM(
+    a: [number, number, number],
+    b: [number, number, number]
+): number {
+    const dx = (b[0] - a[0]) * VOXEL_TO_MM;
+    const dy = (b[1] - a[1]) * VOXEL_TO_MM;
+    const dz = (b[2] - a[2]) * VOXEL_TO_MM;
+    return Math.sqrt(dx * dx + dy * dy + dz * dz);
 }
 
-const DEFAULT_STATS: PlayerStats = {
-    gamesPlayed: 0,
-    gamesWon: 0,
-    currentStreak: 0,
-    maxStreak: 0,
-    guessDistribution: [0, 0, 0, 0, 0, 0],
-    lastPlayedDate: '',
-};
+function computeDirections(
+    guess: Region,
+    target: Region
+): AnatomicalDirection[] {
+    const [gx, gy, gz] = guess.centroid_ccf;
+    const [tx, ty, tz] = target.centroid_ccf;
 
-export const useGameStore = create<Store>()(
-    persist(
-        (set, get) => ({
-            difficulty: 'easy',
-            targetRegion: null,
-            guesses: [],
-            gameOver: false,
-            won: false,
-            showGhostBrain: true,
-            showNeighbors: false,
-            maxGuesses: 5,
-            activeModal: null,
-            lastPlayedDate: '',
-            stats: DEFAULT_STATS,
+    const dz = tz - gz;
+    const dy = ty - gy;
 
-            setDifficulty: (difficulty) => {
-                const { lastPlayedDate } = get();
-                const isToday = lastPlayedDate === getTodayString();
-                // Only reset game state if switching difficulty mid-game or no saved game for today
-                set({
-                    difficulty,
-                    targetRegion: null,
-                    guesses: [],
-                    gameOver: false,
-                    won: false,
-                    showGhostBrain: true,
-                    showNeighbors: false,
-                    activeModal: null,
-                    lastPlayedDate: isToday ? lastPlayedDate : '',
-                });
-            },
+    const MIDLINE = 228;
+    const guessLateral = Math.abs(gx - MIDLINE);
+    const targetLateral = Math.abs(tx - MIDLINE);
+    const lateralDelta = targetLateral - guessLateral;
 
-            setTargetRegion: (targetRegion) => {
-                set({ targetRegion });
-            },
+    const candidates: { dir: AnatomicalDirection; magnitude: number }[] = [
+        { dir: dz < 0 ? 'anterior' : 'posterior', magnitude: Math.abs(dz) },
+        { dir: dy < 0 ? 'dorsal' : 'ventral', magnitude: Math.abs(dy) },
+        { dir: lateralDelta > 0 ? 'lateral' : 'medial', magnitude: Math.abs(lateralDelta) },
+    ];
 
-            submitGuess: (guessRegion: Region) => {
-                const { targetRegion, guesses, stats } = get();
-                if (!targetRegion) return;
+    const significant = candidates
+        .filter((c) => c.magnitude > 4)
+        .sort((a, b) => b.magnitude - a.magnitude);
 
-                const result: GuessResult = getGuessResult(guessRegion, targetRegion);
-                const newGuesses = [...guesses, result];
-                const guessCount = newGuesses.length;
-                const won = result.isCorrect;
-                const gameOver = won || guessCount >= 5;
-                const showGhostBrain = true;
-                const showNeighbors = guessCount >= 4;
+    return significant.slice(0, 2).map((c) => c.dir);
+}
 
-                let newStats = { ...stats };
-                if (gameOver) {
-                    newStats.gamesPlayed += 1;
-                    if (won) {
-                        newStats.gamesWon += 1;
-                        newStats.currentStreak += 1;
-                        newStats.maxStreak = Math.max(newStats.maxStreak, newStats.currentStreak);
-                        const dist = [...newStats.guessDistribution] as PlayerStats['guessDistribution'];
-                        dist[guessCount - 1] += 1;
-                        newStats.guessDistribution = dist;
-                    } else {
-                        newStats.currentStreak = 0;
-                    }
-                    newStats.lastPlayedDate = getTodayString();
-                }
+export function getGuessResult(
+    guessRegion: Region,
+    targetRegion: Region,
+    distanceData?: DistanceMap
+): GuessResult {
+    const isCorrect = guessRegion.id === targetRegion.id;
 
-                set({
-                    guesses: newGuesses,
-                    won,
-                    gameOver,
-                    showGhostBrain,
-                    showNeighbors,
-                    stats: newStats,
-                    lastPlayedDate: gameOver ? getTodayString() : get().lastPlayedDate,
-                    activeModal: gameOver ? 'win' : null,
-                });
-            },
+    if (isCorrect) {
+        return {
+            region: guessRegion,
+            distance_mm: 0,
+            proximity_pct: 100,
+            direction: [],
+            isCorrect: true,
+        };
+    }
 
-            submitGuessWithData: (guessRegion: Region, distanceData: DistanceMap) => {
-                const { targetRegion, guesses, stats } = get();
-                if (!targetRegion) return;
+    const precomputed = distanceData?.[guessRegion.id]?.[targetRegion.id];
+    let distance_mm: number;
+    let direction: AnatomicalDirection[];
 
-                const result: GuessResult = getGuessResult(guessRegion, targetRegion, distanceData);
-                const newGuesses = [...guesses, result];
-                const guessCount = newGuesses.length;
-                const won = result.isCorrect;
-                const gameOver = won || guessCount >= 5;
-                const showGhostBrain = true;
-                const showNeighbors = guessCount >= 4;
+    if (precomputed) {
+        distance_mm = precomputed.distance_mm;
+        direction = precomputed.direction;
+    } else {
+        distance_mm = euclideanDistanceMM(
+            guessRegion.centroid_ccf,
+            targetRegion.centroid_ccf
+        );
+        direction = computeDirections(guessRegion, targetRegion);
+    }
 
-                let newStats = { ...stats };
-                if (gameOver) {
-                    newStats.gamesPlayed += 1;
-                    if (won) {
-                        newStats.gamesWon += 1;
-                        newStats.currentStreak += 1;
-                        newStats.maxStreak = Math.max(newStats.maxStreak, newStats.currentStreak);
-                        const dist = [...newStats.guessDistribution] as PlayerStats['guessDistribution'];
-                        dist[guessCount - 1] += 1;
-                        newStats.guessDistribution = dist;
-                    } else {
-                        newStats.currentStreak = 0;
-                    }
-                    newStats.lastPlayedDate = getTodayString();
-                }
+    distance_mm = Math.round(distance_mm * 10) / 10;
 
-                set({
-                    guesses: newGuesses,
-                    won,
-                    gameOver,
-                    showGhostBrain,
-                    showNeighbors,
-                    stats: newStats,
-                    lastPlayedDate: gameOver ? getTodayString() : get().lastPlayedDate,
-                    activeModal: gameOver ? 'win' : null,
-                });
-            },
+    // Square falloff so mid-range distances feel noticeably far:
+    // proximity = (1 - d/MAX)² × 100, capped 0–99
+    const ratio = Math.min(distance_mm / MAX_BRAIN_DISTANCE_MM, 1);
+    const proximity_pct = Math.max(0, Math.min(99, Math.round((1 - ratio * ratio) * 100)));
 
-            openModal: (activeModal) => set({ activeModal }),
-            closeModal: () => set({ activeModal: null }),
-
-            resetGame: () =>
-                set({
-                    targetRegion: null,
-                    guesses: [],
-                    gameOver: false,
-                    won: false,
-                    showGhostBrain: true,
-                    showNeighbors: false,
-                    activeModal: null,
-                    lastPlayedDate: '',
-                }),
-        }),
-        {
-            name: 'mousewordle-state',
-            partialize: (state) => ({
-                difficulty: state.difficulty,
-                targetRegion: state.targetRegion,   // ← now persisted
-                guesses: state.guesses,
-                gameOver: state.gameOver,
-                won: state.won,
-                showGhostBrain: state.showGhostBrain,
-                showNeighbors: state.showNeighbors,
-                lastPlayedDate: state.lastPlayedDate,
-                stats: state.stats,
-            }),
-        }
-    )
-);
+    return {
+        region: guessRegion,
+        distance_mm,
+        proximity_pct,
+        direction,
+        isCorrect: false,
+    };
+}
