@@ -40,7 +40,7 @@ export function HelpModal({ isOpen, onClose }: Props) {
             {[
               'A 3D mesh of the target region is shown in the viewer. Rotate it with your mouse.',
               'Type a brain region name and select from the autocomplete.',
-              'After each guess you receive feedback on proximity',
+              'After each guess you receive feedback on proximity to the mystery region',
             ].map((step, i) => (
               <li key={i} className="flex gap-3">
                 <span className="text-synapse flex-shrink-0">{i + 1}.</span>
@@ -92,7 +92,7 @@ export function HelpModal({ isOpen, onClose }: Props) {
           </div>
           <div className="flex items-center gap-2">
             <span className="text-cyan-400 font-mono text-xs px-2 py-0.5 bg-white/5 border border-white/10 rounded">← Anterior</span>
-            <span className="text-gray-500 text-xs">direction to the target</span>
+            <span className="text-gray-500 text-xs">Direction to the target</span>
           </div>
           <div className="text-xs text-gray-500">Distance in mm from your guess to the target</div>
         </div>
