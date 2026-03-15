@@ -33,5 +33,4 @@ Thumbs.db
 next-env.d.ts
 
 # Large mesh files (download separately per README)
-public/meshes/*.glb
-public/meshes/*.obj
+
