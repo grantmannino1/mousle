@@ -1,7 +1,7 @@
 'use client';
 
-import { Suspense, useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Suspense } from 'react';
+import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, Center, Bounds, useGLTF, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import type { Region, GuessResult } from '@/types';
@@ -42,13 +42,27 @@ function GhostBrain({ allenId }: { allenId: number }) {
   return <primitive object={cloned} />;
 }
 
+/**
+ * Map proximity % to a color:
+ * 0%   → red    #f06060
+ * 30%  → orange #f09040
+ * 50%  → yellow #f0d050
+ * 70%  → yellow-green #a0e060
+ * 90%+ → green  #4af0c4
+ */
+function proximityToColor(pct: number): { color: string; emissive: string } {
+  if (pct >= 90) return { color: '#4af0c4', emissive: '#1a8060' };
+  if (pct >= 70) return { color: '#a0e060', emissive: '#406020' };
+  if (pct >= 50) return { color: '#f0d050', emissive: '#806020' };
+  if (pct >= 30) return { color: '#f09040', emissive: '#804010' };
+  return { color: '#f06060', emissive: '#802020' };
+}
+
 const WHOLE_BRAIN_ALLEN_ID = 997;
 
 function Scene({ targetRegion, guesses }: { targetRegion: Region; guesses: GuessResult[] }) {
-  const groupRef = useRef<THREE.Group>(null);
-  useFrame((_, delta) => {
-    if (groupRef.current) groupRef.current.rotation.y += delta * 0.12;
-  });
+  const isFiber = targetRegion.category === 'fiber';
+
   return (
     <>
       <ambientLight intensity={0.7} />
@@ -58,29 +72,34 @@ function Scene({ targetRegion, guesses }: { targetRegion: Region; guesses: Guess
       <Environment preset="studio" />
       <Bounds fit clip observe margin={1.4}>
         <Center>
-          <group ref={groupRef}>
-            {/* Ghost whole brain */}
+          <group rotation={[Math.PI, 0, 0]}>
             <GhostBrain allenId={WHOLE_BRAIN_ALLEN_ID} />
 
-            {/* Previously guessed regions — faded blue */}
+            {/* Past guesses — colored by proximity, white if fiber */}
             {guesses
               .filter((g) => !g.isCorrect)
-              .map((g) => (
-                <RegionMesh
-                  key={g.region.id}
-                  allenId={g.region.allenId}
-                  color="#4466aa"
-                  opacity={0.35}
-                  emissive="#223355"
-                  emissiveIntensity={0.1}
-                />
-              ))}
+              .map((g) => {
+                const isFiberGuess = g.region.category === 'fiber';
+                const { color, emissive } = isFiberGuess
+                  ? { color: '#ffffff', emissive: '#aaaaaa' }
+                  : proximityToColor(g.proximity_pct);
+                return (
+                  <RegionMesh
+                    key={g.region.id}
+                    allenId={g.region.allenId}
+                    color={color}
+                    opacity={0.5}
+                    emissive={emissive}
+                    emissiveIntensity={0.2}
+                  />
+                );
+              })}
 
-            {/* Target region — glowing coral */}
+            {/* Target region */}
             <RegionMesh
               allenId={targetRegion.allenId}
-              color="#f06060"
-              emissive="#f03030"
+              color={isFiber ? '#ffffff' : '#f06060'}
+              emissive={isFiber ? '#aaaaff' : '#f03030'}
               emissiveIntensity={0.4}
             />
           </group>
@@ -119,9 +138,11 @@ export function BrainViewer({ targetRegion, guesses }: BrainViewerProps) {
         <OrbitControls
           enableDamping
           dampingFactor={0.05}
-          minDistance={50}
+          minDistance={150}
           maxDistance={600}
           makeDefault
+          autoRotate
+          autoRotateSpeed={0.8}
         />
       </Canvas>
       <div className="absolute bottom-3 right-3 text-xs font-mono text-gray-600">

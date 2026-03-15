@@ -47,7 +47,7 @@ export function WinModal({ isOpen, onClose, state }: Props) {
           {state.won ? (
             <>
               <div className="text-synapse text-lg font-display tracking-wider mb-1">
-                Solved in {state.guesses.length}/6 guess{state.guesses.length !== 1 ? 'es' : ''}!
+                Solved in {state.guesses.length}/5 guess{state.guesses.length !== 1 ? 'es' : ''}!
               </div>
               <div className="text-gray-400 text-xs">Well done!</div>
             </>

@@ -22,9 +22,11 @@ import type {
 // 1 voxel = 25 µm = 0.025 mm (Allen CCFv3 at 25µm resolution)
 const VOXEL_TO_MM = 0.025;
 
-// Approximate maximum distance across the mouse brain in mm
-// (mouse brain is ~11mm AP × 8mm DV × 11mm LR)
-const MAX_BRAIN_DISTANCE_MM = 15;
+// True maximum centroid-to-centroid distance in the CCF volume.
+// CCF dimensions: 456 × 320 × 528 voxels → 11.4 × 8.0 × 13.2 mm
+// Diagonal ≈ sqrt(11.4² + 8² + 13.2²) ≈ 19mm, but real region
+// centroids span ~14mm at most. Using 14 gives a well-spread 0–100% scale.
+const MAX_BRAIN_DISTANCE_MM = 14;
 
 /**
  * Compute Euclidean distance between two CCF centroids, in mm.
@@ -58,7 +60,6 @@ function computeDirections(
 
   const dz = tz - gz; // positive = target is more posterior
   const dy = ty - gy; // positive = target is more ventral
-  const dx = tx - gx; // positive = target is more to the right in CCF
 
   // Lateral/medial: compare distance from midline
   const MIDLINE = 228;
@@ -128,9 +129,13 @@ export function getGuessResult(
 
   // Clamp and round
   distance_mm = Math.round(distance_mm * 10) / 10;
+
+  // proximity_pct: 0 = as far as possible, 100 = correct
+  // Uses a non-linear scale so nearby guesses feel meaningfully different.
+  // A region 1mm away → ~93%, 5mm → ~64%, 10mm → ~29%, 14mm → 0%
   const proximity_pct = Math.max(
     0,
-    Math.round((1 - distance_mm / MAX_BRAIN_DISTANCE_MM) * 100)
+    Math.min(99, Math.round((1 - distance_mm / MAX_BRAIN_DISTANCE_MM) * 100))
   );
 
   return {

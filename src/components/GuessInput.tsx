@@ -5,7 +5,7 @@
 
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import type { Region } from '@/types';
 import { searchRegions, filterByDifficulty } from '@/lib/regions';
 
@@ -14,7 +14,7 @@ interface Props {
   difficulty: 'easy' | 'medium' | 'hard';
   onSubmit: (region: Region) => void;
   disabled: boolean;
-  alreadyGuessed: string[]; // region IDs already guessed
+  alreadyGuessed: string[];
 }
 
 export function GuessInput({
@@ -30,23 +30,30 @@ export function GuessInput({
   const [isOpen, setIsOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // The pool of guessable regions for this difficulty
-  const pool = filterByDifficulty(allRegions, difficulty);
+  // Memoize pool so it doesn't create a new array reference on every render
+  const pool = useMemo(
+    () => filterByDifficulty(allRegions, difficulty),
+    [allRegions, difficulty]
+  );
 
-  // Update results whenever query changes
+  // Memoize alreadyGuessed as a Set for fast lookup
+  const guessedSet = useMemo(
+    () => new Set(alreadyGuessed),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [alreadyGuessed.join(',')]
+  );
+
   useEffect(() => {
     if (!query.trim()) {
       setResults([]);
       setIsOpen(false);
       return;
     }
-    const found = searchRegions(query, pool)
-      // Filter out already-guessed regions
-      .filter((r) => !alreadyGuessed.includes(r.id));
-    setResults(found.slice(0, 8)); // Max 8 dropdown items
+    const found = searchRegions(query, pool).filter((r) => !guessedSet.has(r.id));
+    setResults(found.slice(0, 8));
     setIsOpen(found.length > 0);
     setSelectedIndex(-1);
-  }, [query, pool, alreadyGuessed]);
+  }, [query, pool, guessedSet]);
 
   const handleSelect = useCallback(
     (region: Region) => {
@@ -135,7 +142,6 @@ export function GuessInput({
         </button>
       </div>
 
-      {/* Dropdown */}
       {isOpen && results.length > 0 && (
         <div className="
           absolute top-full left-0 right-0 mt-1 z-50
