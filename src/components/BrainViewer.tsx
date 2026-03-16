@@ -142,7 +142,8 @@ export function BrainViewer({ targetRegion, guesses }: BrainViewerProps) {
           maxDistance={600}
           makeDefault
           autoRotate
-          autoRotateSpeed={0.8}
+          autoRotateSpeed={0.7}
+          enablePan={false}
         />
       </Canvas>
       <div className="absolute bottom-3 right-3 text-xs font-mono text-gray-600">
