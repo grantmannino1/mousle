@@ -85,7 +85,7 @@ export function BrainViewer({ targetRegion, guesses }: BrainViewerProps) {
   return (
     <div className="w-full h-full rounded-xl overflow-hidden" style={{ background: '#0d0f14' }}>
       <Canvas
-        camera={{ position: [0, 0, 500], fov: 45 }}
+        camera={{ position: [200, 150, 200], fov: 45 }}
         gl={{ antialias: true, alpha: false }}
       >
         <ambientLight intensity={0.6} />
@@ -99,8 +99,8 @@ export function BrainViewer({ targetRegion, guesses }: BrainViewerProps) {
           enableRotate
           autoRotate
           autoRotateSpeed={0.3}
-          minDistance={80}
-          maxDistance={300}
+          minDistance={150}
+          maxDistance={500}
           dampingFactor={0.05}
           enableDamping
           target={[0, 0, 0]}
