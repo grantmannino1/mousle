@@ -1,54 +1,18 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, Center, Bounds, useGLTF, Html } from '@react-three/drei';
+import { OrbitControls, useGLTF, Center, Environment } from '@react-three/drei';
 import * as THREE from 'three';
 import type { Region, GuessResult } from '@/types';
 
-interface RegionMeshProps {
-  allenId: number;
-  color: string;
-  opacity?: number;
-  emissive?: string;
-  emissiveIntensity?: number;
-}
+// Allen CCF → Three.js orientation
+const CCF_TO_THREEJS: [number, number, number] = [Math.PI, 0, 0];
 
-function RegionMesh({ allenId, color, opacity = 1, emissive = '#000000', emissiveIntensity = 0 }: RegionMeshProps) {
-  const { scene } = useGLTF(`/meshes/${allenId}.glb`);
-  const cloned = scene.clone();
-  cloned.traverse((child: any) => {
-    if (child.isMesh) {
-      child.material = new THREE.MeshStandardMaterial({
-        color, emissive, emissiveIntensity, opacity,
-        transparent: opacity < 1, roughness: 0.5, metalness: 0.1, side: THREE.DoubleSide,
-      });
-    }
-  });
-  return <primitive object={cloned} />;
-}
-
-function GhostBrain({ allenId }: { allenId: number }) {
-  const { scene } = useGLTF(`/meshes/${allenId}.glb`);
-  const cloned = scene.clone();
-  cloned.traverse((child: any) => {
-    if (child.isMesh) {
-      child.material = new THREE.MeshStandardMaterial({
-        color: '#4488aa', transparent: true, opacity: 0.12,
-        side: THREE.FrontSide, depthWrite: false,
-      });
-    }
-  });
-  return <primitive object={cloned} />;
-}
+const WHOLE_BRAIN_ALLEN_ID = 997;
 
 /**
- * Map proximity % to a color:
- * 0%   → red    #f06060
- * 30%  → orange #f09040
- * 50%  → yellow #f0d050
- * 70%  → yellow-green #a0e060
- * 90%+ → green  #4af0c4
+ * Map proximity % to a color for guessed regions.
  */
 function proximityToColor(pct: number): { color: string; emissive: string } {
   if (pct >= 90) return { color: '#4af0c4', emissive: '#1a8060' };
@@ -58,63 +22,54 @@ function proximityToColor(pct: number): { color: string; emissive: string } {
   return { color: '#f06060', emissive: '#802020' };
 }
 
-const WHOLE_BRAIN_ALLEN_ID = 997;
-
-function Scene({ targetRegion, guesses }: { targetRegion: Region; guesses: GuessResult[] }) {
-  const isFiber = targetRegion.category === 'fiber';
-
-  return (
-    <>
-      <ambientLight intensity={0.7} />
-      <directionalLight position={[5, 8, 5]} intensity={1.0} castShadow />
-      <directionalLight position={[-5, -3, -5]} intensity={0.4} color="#4466aa" />
-      <pointLight position={[0, 0, 10]} intensity={0.5} color="#4af0c4" />
-      <Environment preset="studio" />
-      <Bounds fit clip observe margin={1.4}>
-        <Center>
-          <group rotation={[Math.PI, 0, 0]}>
-            <GhostBrain allenId={WHOLE_BRAIN_ALLEN_ID} />
-
-            {/* Past guesses — colored by proximity, white if fiber */}
-            {guesses
-              .filter((g) => !g.isCorrect)
-              .map((g) => {
-                const isFiberGuess = g.region.category === 'fiber';
-                const { color, emissive } = isFiberGuess
-                  ? { color: '#ffffff', emissive: '#aaaaaa' }
-                  : proximityToColor(g.proximity_pct);
-                return (
-                  <RegionMesh
-                    key={g.region.id}
-                    allenId={g.region.allenId}
-                    color={color}
-                    opacity={0.5}
-                    emissive={emissive}
-                    emissiveIntensity={0.2}
-                  />
-                );
-              })}
-
-            {/* Target region */}
-            <RegionMesh
-              allenId={targetRegion.allenId}
-              color={isFiber ? '#ffffff' : '#f06060'}
-              emissive={isFiber ? '#aaaaff' : '#f03030'}
-              emissiveIntensity={0.4}
-            />
-          </group>
-        </Center>
-      </Bounds>
-    </>
-  );
+function RegionMesh({ allenId, color, emissive = '#000000', emissiveIntensity = 0, opacity = 1 }: {
+  allenId: number;
+  color: string;
+  emissive?: string;
+  emissiveIntensity?: number;
+  opacity?: number;
+}) {
+  const { scene } = useGLTF(`/meshes/${allenId}.glb`);
+  const cloned = useMemo(() => {
+    const c = scene.clone(true);
+    c.traverse((child: any) => {
+      if (child.isMesh) {
+        child.material = new THREE.MeshStandardMaterial({
+          color,
+          emissive,
+          emissiveIntensity,
+          roughness: 0.6,
+          metalness: 0.1,
+          transparent: opacity < 1,
+          opacity,
+          depthWrite: opacity >= 1,
+          side: THREE.DoubleSide,
+        });
+      }
+    });
+    return c;
+  }, [scene, color, emissive, emissiveIntensity, opacity]);
+  return <primitive object={cloned} />;
 }
 
-function LoadingMesh() {
-  return (
-    <Html center>
-      <div className="text-synapse font-mono text-sm animate-pulse">Loading region...</div>
-    </Html>
-  );
+function GhostBrain() {
+  const { scene } = useGLTF(`/meshes/${WHOLE_BRAIN_ALLEN_ID}.glb`);
+  const cloned = useMemo(() => {
+    const c = scene.clone(true);
+    c.traverse((child: any) => {
+      if (child.isMesh) {
+        child.material = new THREE.MeshStandardMaterial({
+          color: '#4488aa',
+          transparent: true,
+          opacity: 0.12,
+          side: THREE.FrontSide,
+          depthWrite: false,
+        });
+      }
+    });
+    return c;
+  }, [scene]);
+  return <primitive object={cloned} />;
 }
 
 interface BrainViewerProps {
@@ -125,29 +80,71 @@ interface BrainViewerProps {
 }
 
 export function BrainViewer({ targetRegion, guesses }: BrainViewerProps) {
+  const isFiber = targetRegion.category === 'fiber';
+
   return (
-    <div className="w-full h-full rounded-lg overflow-hidden border border-lab-border bg-lab-bg relative">
+    <div className="w-full h-full rounded-xl overflow-hidden" style={{ background: '#0d0f14' }}>
       <Canvas
-        camera={{ position: [200, 150, 200], fov: 45 }}
+        camera={{ position: [-107, 20, -160], fov: 45 }}
         gl={{ antialias: true, alpha: false }}
-        style={{ background: '#0d0f14' }}
       >
-        <Suspense fallback={<LoadingMesh />}>
-          <Scene targetRegion={targetRegion} guesses={guesses} />
-        </Suspense>
+        <ambientLight intensity={0.6} />
+        <directionalLight position={[50, 50, 50]} intensity={1.2} />
+        <directionalLight position={[-50, -30, -50]} intensity={0.4} color="#4466aa" />
+        <Environment preset="studio" />
+
         <OrbitControls
-          enableDamping
-          dampingFactor={0.05}
-          minDistance={150}
-          maxDistance={600}
-          makeDefault
-          autoRotate
-          autoRotateSpeed={0.7}
           enablePan={false}
+          enableZoom
+          enableRotate
+          autoRotate
+          autoRotateSpeed={0.3}
+          minDistance={80}
+          maxDistance={300}
+          dampingFactor={0.05}
+          enableDamping
           target={[0, 0, 0]}
         />
+
+        <group rotation={CCF_TO_THREEJS}>
+          <Suspense fallback={null}>
+            <Center>
+              {/* Ghost brain outline */}
+              <GhostBrain />
+
+              {/* Past guesses colored by proximity */}
+              {guesses
+                .filter((g) => !g.isCorrect)
+                .map((g) => {
+                  const isFiberGuess = g.region.category === 'fiber';
+                  const { color, emissive } = isFiberGuess
+                    ? { color: '#ffffff', emissive: '#aaaaaa' }
+                    : proximityToColor(g.proximity_pct);
+                  return (
+                    <RegionMesh
+                      key={g.region.id}
+                      allenId={g.region.allenId}
+                      color={color}
+                      emissive={emissive}
+                      emissiveIntensity={0.2}
+                      opacity={0.5}
+                    />
+                  );
+                })}
+
+              {/* Target region */}
+              <RegionMesh
+                allenId={targetRegion.allenId}
+                color={isFiber ? '#ffffff' : '#f06060'}
+                emissive={isFiber ? '#aaaaff' : '#f03030'}
+                emissiveIntensity={0.4}
+              />
+            </Center>
+          </Suspense>
+        </group>
       </Canvas>
-      <div className="absolute bottom-3 right-3 text-xs font-mono text-gray-600">
+
+      <div className="absolute bottom-3 right-3 text-xs font-mono text-gray-600 pointer-events-none">
         Drag to rotate · Scroll to zoom
       </div>
     </div>
