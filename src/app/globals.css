@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -17,9 +17,17 @@ body {
   height: 100%;
   background-color: #0d0f14;
   color: #e8e8e8;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Grotesk', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Monospace elements keep IBM Plex Mono */
+.font-mono,
+input,
+code,
+pre {
+  font-family: 'IBM Plex Mono', monospace !important;
 }
 
 /* Subtle scanline texture for lab aesthetic */
@@ -27,13 +35,11 @@ body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.03) 2px,
-    rgba(0, 0, 0, 0.03) 4px
-  );
+  background-image: repeating-linear-gradient(0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.03) 2px,
+      rgba(0, 0, 0, 0.03) 4px);
   pointer-events: none;
   z-index: 9999;
 }
@@ -42,13 +48,16 @@ body::before {
 ::-webkit-scrollbar {
   width: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: #141720;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #2a3040;
   border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #4af0c4;
 }
@@ -57,6 +66,7 @@ body::before {
 canvas {
   cursor: grab;
 }
+
 canvas:active {
   cursor: grabbing;
 }

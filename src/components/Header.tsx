@@ -17,12 +17,12 @@ export function Header() {
 
         <div className="text-center">
           <h1
-            style={{ fontFamily: 'Helvetica, Arial, sans-serif', fontWeight: 900, letterSpacing: '0.15em' }}
-            className="text-2xl text-synapse"
+            style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, letterSpacing: '0.2em' }}
+            className="text-2xl text-synapse uppercase"
           >
             MOUSLE
           </h1>
-          <p className="text-xs text-gray-500 tracking-wider mt-0.5">
+          <p style={{ fontFamily: 'IBM Plex Mono, monospace' }} className="text-xs text-gray-500 tracking-wider mt-0.5">
             A MOUSE BRAIN ATLAS GAME
           </p>
         </div>
