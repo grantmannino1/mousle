@@ -38,13 +38,19 @@ export function getPuzzleNumber(): number {
 
 /**
  * Get today's target region for a given difficulty.
- * Deterministic: same date + difficulty always picks the same region.
+ * Uses a large prime offset per difficulty to ensure the three difficulties
+ * never pick the same region on the same day, even if pools overlap.
  */
 export function getDailyRegion(
   allRegions: Region[],
   difficulty: 'easy' | 'medium' | 'hard'
 ): Region {
   const pool = filterByDifficulty(allRegions, difficulty);
-  const seed = hashCode(getTodayString() + '-' + difficulty);
+  const dateStr = getTodayString();
+
+  // Large prime offsets per difficulty — guarantees different indices
+  const offsets = { easy: 0, medium: 104729, hard: 224737 };
+  const seed = hashCode(dateStr) + offsets[difficulty];
+
   return pool[Math.abs(seed) % pool.length];
 }

@@ -53,7 +53,7 @@
       "allenId": 390,
       "name": "Supraoptic nucleus",
       "abbreviation": "SO",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Periventricular zone",
       "centroid_ccf": [
@@ -85,7 +85,7 @@
       "allenId": 669,
       "name": "Visual areas",
       "abbreviation": "VIS",
-      "difficulty": "hard",
+      "difficulty": "easy",
       "category": "cortex",
       "parentName": "Isocortex",
       "centroid_ccf": [
@@ -133,7 +133,7 @@
       "allenId": 866,
       "name": "ventral spinocerebellar tract",
       "abbreviation": "sctv",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "cerebellum",
       "parentName": "superior cerebelar peduncles",
       "centroid_ccf": [
@@ -149,7 +149,7 @@
       "allenId": 184,
       "name": "Frontal pole, cerebral cortex",
       "abbreviation": "FRP",
-      "difficulty": "hard",
+      "difficulty": "easy",
       "category": "cortex",
       "parentName": "Isocortex",
       "centroid_ccf": [
@@ -165,7 +165,7 @@
       "allenId": 131,
       "name": "Lateral amygdalar nucleus",
       "abbreviation": "LA",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Cortical subplate",
       "centroid_ccf": [
@@ -229,7 +229,7 @@
       "allenId": 714,
       "name": "Orbital area",
       "abbreviation": "ORB",
-      "difficulty": "hard",
+      "difficulty": "easy",
       "category": "cortex",
       "parentName": "Isocortex",
       "centroid_ccf": [
@@ -293,7 +293,7 @@
       "allenId": 621,
       "name": "Motor nucleus of trigeminal",
       "abbreviation": "V",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Pons, motor related",
       "centroid_ccf": [
@@ -328,7 +328,7 @@
       "allenId": 1129,
       "name": "Interbrain",
       "abbreviation": "IB",
-      "difficulty": "medium",
+      "difficulty": "hard",
       "category": "subcortical",
       "parentName": "Brain stem",
       "centroid_ccf": [
@@ -376,7 +376,7 @@
       "allenId": 894,
       "name": "Retrosplenial area, lateral agranular part",
       "abbreviation": "RSPagl",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "cortex",
       "parentName": "Retrosplenial area",
       "centroid_ccf": [
@@ -440,7 +440,7 @@
       "allenId": 323,
       "name": "Midbrain, motor related",
       "abbreviation": "MBmot",
-      "difficulty": "medium",
+      "difficulty": "easy",
       "category": "brainstem",
       "parentName": "Midbrain",
       "centroid_ccf": [
@@ -536,7 +536,7 @@
       "allenId": 502,
       "name": "Subiculum",
       "abbreviation": "SUB",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Retrohippocampal region",
       "centroid_ccf": [
@@ -552,7 +552,7 @@
       "allenId": 514,
       "name": "dorsal column",
       "abbreviation": "dc",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "cervicothalamic tract",
       "centroid_ccf": [
@@ -587,7 +587,7 @@
       "allenId": 1014,
       "name": "Geniculate group, ventral thalamus",
       "abbreviation": "GENv",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Thalamus, polymodal association cortex related",
       "centroid_ccf": [
@@ -699,7 +699,7 @@
       "allenId": 129,
       "name": "third ventricle",
       "abbreviation": "V3",
-      "difficulty": "easy",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "ventricular systems",
       "centroid_ccf": [
@@ -715,7 +715,7 @@
       "allenId": 1002,
       "name": "Primary auditory area",
       "abbreviation": "AUDp",
-      "difficulty": "easy",
+      "difficulty": "medium",
       "category": "cortex",
       "parentName": "Auditory areas",
       "centroid_ccf": [
@@ -882,7 +882,7 @@
       "allenId": 337,
       "name": "Primary somatosensory area, lower limb",
       "abbreviation": "SSp-ll",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "cortex",
       "parentName": "Primary somatosensory area",
       "centroid_ccf": [
@@ -898,7 +898,7 @@
       "allenId": 589,
       "name": "Taenia tecta",
       "abbreviation": "TT",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Olfactory areas",
       "centroid_ccf": [
@@ -914,7 +914,7 @@
       "allenId": 835,
       "name": "Pallidum, ventral region",
       "abbreviation": "PALv",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Pallidum",
       "centroid_ccf": [
@@ -1015,7 +1015,7 @@
       "allenId": 312782628,
       "name": "Postrhinal area",
       "abbreviation": "VISpor",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "cortex",
       "parentName": "Visual areas",
       "centroid_ccf": [
@@ -1031,7 +1031,7 @@
       "allenId": 1091,
       "name": "Lobules IV-V",
       "abbreviation": "CUL4, 5",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Culmen",
       "centroid_ccf": [
@@ -1047,7 +1047,7 @@
       "allenId": 382,
       "name": "Field CA1",
       "abbreviation": "CA1",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Ammon's horn",
       "centroid_ccf": [
@@ -1103,7 +1103,7 @@
       "allenId": 1084,
       "name": "Presubiculum",
       "abbreviation": "PRE",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Retrohippocampal region",
       "centroid_ccf": [
@@ -1119,7 +1119,7 @@
       "allenId": 379,
       "name": "Medulla, behavioral state related",
       "abbreviation": "MY-sat",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "brainstem",
       "parentName": "Medulla",
       "centroid_ccf": [
@@ -1183,7 +1183,7 @@
       "allenId": 463,
       "name": "Field CA3",
       "abbreviation": "CA3",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Ammon's horn",
       "centroid_ccf": [
@@ -1202,7 +1202,7 @@
       "allenId": 278,
       "name": "Striatum-like amygdalar nuclei",
       "abbreviation": "sAMY",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Striatum",
       "centroid_ccf": [
@@ -1218,7 +1218,7 @@
       "allenId": 140,
       "name": "cerebral aqueduct",
       "abbreviation": "AQ",
-      "difficulty": "easy",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "ventricular systems",
       "centroid_ccf": [
@@ -1234,7 +1234,7 @@
       "allenId": 553,
       "name": "dorsal spinocerebellar tract",
       "abbreviation": "sctd",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "cerebellum",
       "parentName": "inferior cerebellar peduncle",
       "centroid_ccf": [
@@ -1282,7 +1282,7 @@
       "allenId": 194,
       "name": "Lateral hypothalamic area",
       "abbreviation": "LHA",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "cortex",
       "parentName": "Hypothalamic lateral zone",
       "centroid_ccf": [
@@ -1298,7 +1298,7 @@
       "allenId": 818,
       "name": "Pallidum, dorsal region",
       "abbreviation": "PALd",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Pallidum",
       "centroid_ccf": [
@@ -1314,7 +1314,7 @@
       "allenId": 579,
       "name": "external capsule",
       "abbreviation": "ec",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "fiber",
       "parentName": "corpus callosum, anterior forceps",
       "centroid_ccf": [
@@ -1346,7 +1346,7 @@
       "allenId": 820,
       "name": "Inferior colliculus, dorsal nucleus",
       "abbreviation": "ICd",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "brainstem",
       "parentName": "Inferior colliculus",
       "centroid_ccf": [
@@ -1394,7 +1394,7 @@
       "allenId": 850,
       "name": "uncinate fascicle",
       "abbreviation": "uf",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "superior cerebelar peduncles",
       "centroid_ccf": [
@@ -1410,7 +1410,7 @@
       "allenId": 322,
       "name": "Primary somatosensory area",
       "abbreviation": "SSp",
-      "difficulty": "easy",
+      "difficulty": "medium",
       "category": "cortex",
       "parentName": "Somatosensory areas",
       "centroid_ccf": [
@@ -1465,7 +1465,7 @@
       "allenId": 754,
       "name": "Olfactory tubercle",
       "abbreviation": "OT",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "olfactory",
       "parentName": "Striatum ventral region",
       "centroid_ccf": [
@@ -1481,7 +1481,7 @@
       "allenId": 381,
       "name": "Substantia nigra, reticular part",
       "abbreviation": "SNr",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Midbrain, motor related",
       "centroid_ccf": [
@@ -1499,7 +1499,7 @@
       "allenId": 672,
       "name": "Caudoputamen",
       "abbreviation": "CP",
-      "difficulty": "medium",
+      "difficulty": "easy",
       "category": "subcortical",
       "parentName": "Striatum dorsal region",
       "centroid_ccf": [
@@ -1536,7 +1536,7 @@
       "allenId": 1092,
       "name": "external medullary lamina of the thalamus",
       "abbreviation": "em",
-      "difficulty": "medium",
+      "difficulty": "easy",
       "category": "brainstem",
       "parentName": "thalamus related",
       "centroid_ccf": [
@@ -1552,7 +1552,7 @@
       "allenId": 425,
       "name": "Posterolateral visual area",
       "abbreviation": "VISpl",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "cortex",
       "parentName": "Visual areas",
       "centroid_ccf": [
@@ -1620,7 +1620,7 @@
       "allenId": 484682516,
       "name": "corpus callosum, body",
       "abbreviation": "ccb",
-      "difficulty": "medium",
+      "difficulty": "hard",
       "category": "fiber",
       "parentName": "corpus callosum",
       "centroid_ccf": [
@@ -1636,7 +1636,7 @@
       "allenId": 997,
       "name": "root",
       "abbreviation": "root",
-      "difficulty": "easy",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "",
       "centroid_ccf": [
@@ -1652,7 +1652,7 @@
       "allenId": 170,
       "name": "Dorsal part of the lateral geniculate complex",
       "abbreviation": "LGd",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Geniculate group, dorsal thalamus",
       "centroid_ccf": [
@@ -1720,7 +1720,7 @@
       "allenId": 507,
       "name": "Main olfactory bulb",
       "abbreviation": "MOB",
-      "difficulty": "hard",
+      "difficulty": "easy",
       "category": "olfactory",
       "parentName": "Olfactory areas",
       "centroid_ccf": [
@@ -1787,7 +1787,7 @@
       "allenId": 1099,
       "name": "fornix system",
       "abbreviation": "fxs",
-      "difficulty": "medium",
+      "difficulty": "easy",
       "category": "subcortical",
       "parentName": "cerebrum related",
       "centroid_ccf": [
@@ -1855,7 +1855,7 @@
       "allenId": 771,
       "name": "Pons",
       "abbreviation": "P",
-      "difficulty": "medium",
+      "difficulty": "easy",
       "category": "brainstem",
       "parentName": "Hindbrain",
       "centroid_ccf": [
@@ -1871,7 +1871,7 @@
       "allenId": 1008,
       "name": "Geniculate group, dorsal thalamus",
       "abbreviation": "GENd",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Thalamus, sensory-motor cortex related",
       "centroid_ccf": [
@@ -1906,7 +1906,7 @@
       "allenId": 1022,
       "name": "Globus pallidus, external segment",
       "abbreviation": "GPe",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Pallidum, dorsal region",
       "centroid_ccf": [
@@ -1941,7 +1941,7 @@
       "allenId": 589508455,
       "name": "Vestibulocerebellar nucleus",
       "abbreviation": "VeCB",
-      "difficulty": "medium",
+      "difficulty": "hard",
       "category": "cerebellum",
       "parentName": "Cerebellar nuclei",
       "centroid_ccf": [
@@ -1957,7 +1957,7 @@
       "allenId": 500,
       "name": "Somatomotor areas",
       "abbreviation": "MO",
-      "difficulty": "hard",
+      "difficulty": "easy",
       "category": "cortex",
       "parentName": "Isocortex",
       "centroid_ccf": [
@@ -2024,7 +2024,7 @@
       "allenId": 302,
       "name": "Superior colliculus, sensory related",
       "abbreviation": "SCs",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "brainstem",
       "parentName": "Midbrain, sensory related",
       "centroid_ccf": [
@@ -2040,7 +2040,7 @@
       "allenId": 31,
       "name": "Anterior cingulate area",
       "abbreviation": "ACA",
-      "difficulty": "medium",
+      "difficulty": "easy",
       "category": "cortex",
       "parentName": "Isocortex",
       "centroid_ccf": [
@@ -2076,7 +2076,7 @@
       "allenId": 985,
       "name": "Primary motor area",
       "abbreviation": "MOp",
-      "difficulty": "easy",
+      "difficulty": "medium",
       "category": "cortex",
       "parentName": "Somatomotor areas",
       "centroid_ccf": [
@@ -2096,7 +2096,7 @@
       "allenId": 409,
       "name": "Lateral visual area",
       "abbreviation": "VISl",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "cortex",
       "parentName": "Visual areas",
       "centroid_ccf": [
@@ -2131,7 +2131,7 @@
       "allenId": 822,
       "name": "Retrohippocampal region",
       "abbreviation": "RHP",
-      "difficulty": "hard",
+      "difficulty": "easy",
       "category": "subcortical",
       "parentName": "Hippocampal formation",
       "centroid_ccf": [
@@ -2163,7 +2163,7 @@
       "allenId": 1025,
       "name": "Paramedian lobule",
       "abbreviation": "PRM",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Hemispheric regions",
       "centroid_ccf": [
@@ -2179,7 +2179,7 @@
       "allenId": 519,
       "name": "Cerebellar nuclei",
       "abbreviation": "CBN",
-      "difficulty": "medium",
+      "difficulty": "easy",
       "category": "cerebellum",
       "parentName": "Cerebellum",
       "centroid_ccf": [
@@ -2198,7 +2198,7 @@
       "allenId": 898,
       "name": "Pontine central gray",
       "abbreviation": "PCG",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Pons, motor related",
       "centroid_ccf": [
@@ -2214,7 +2214,7 @@
       "allenId": 863,
       "name": "rubrospinal tract",
       "abbreviation": "rust",
-      "difficulty": "medium",
+      "difficulty": "hard",
       "category": "fiber",
       "parentName": "extrapyramidal fiber systems",
       "centroid_ccf": [
@@ -2230,7 +2230,7 @@
       "allenId": 254,
       "name": "Retrosplenial area",
       "abbreviation": "RSP",
-      "difficulty": "medium",
+      "difficulty": "easy",
       "category": "cortex",
       "parentName": "Isocortex",
       "centroid_ccf": [
@@ -2249,7 +2249,7 @@
       "allenId": 406,
       "name": "Subparafascicular nucleus",
       "abbreviation": "SPF",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Thalamus, sensory-motor cortex related",
       "centroid_ccf": [
@@ -2297,7 +2297,7 @@
       "allenId": 385,
       "name": "Primary visual area",
       "abbreviation": "VISp",
-      "difficulty": "easy",
+      "difficulty": "medium",
       "category": "cortex",
       "parentName": "Visual areas",
       "centroid_ccf": [
@@ -2317,7 +2317,7 @@
       "allenId": 147,
       "name": "Locus ceruleus",
       "abbreviation": "LC",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "brainstem",
       "parentName": "Pons, behavioral state related",
       "centroid_ccf": [
@@ -2336,7 +2336,7 @@
       "allenId": 118,
       "name": "Periventricular hypothalamic nucleus, intermediate part",
       "abbreviation": "PVi",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Periventricular zone",
       "centroid_ccf": [
@@ -2352,7 +2352,7 @@
       "allenId": 26,
       "name": "Superior colliculus, motor related, deep gray layer",
       "abbreviation": "SCdg",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "brainstem",
       "parentName": "Superior colliculus, motor related",
       "centroid_ccf": [
@@ -2368,7 +2368,7 @@
       "allenId": 828,
       "name": "Inferior colliculus, external nucleus",
       "abbreviation": "ICe",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "brainstem",
       "parentName": "Inferior colliculus",
       "centroid_ccf": [
@@ -2384,7 +2384,7 @@
       "allenId": 526157196,
       "name": "Frontal pole, layer 6a",
       "abbreviation": "FRP6a",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Frontal pole, cerebral cortex",
       "centroid_ccf": [
@@ -2400,7 +2400,7 @@
       "allenId": 693,
       "name": "Ventromedial hypothalamic nucleus",
       "abbreviation": "VMH",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Hypothalamic medial zone",
       "centroid_ccf": [
@@ -2474,7 +2474,7 @@
       "allenId": 331,
       "name": "Mammillary body",
       "abbreviation": "MBO",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Hypothalamic medial zone",
       "centroid_ccf": [
@@ -2522,7 +2522,7 @@
       "allenId": 780,
       "name": "Posterior amygdalar nucleus",
       "abbreviation": "PA",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "subcortical",
       "parentName": "Cortical subplate",
       "centroid_ccf": [
@@ -2554,7 +2554,7 @@
       "allenId": 1011,
       "name": "Dorsal auditory area",
       "abbreviation": "AUDd",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "cortex",
       "parentName": "Auditory areas",
       "centroid_ccf": [
@@ -2570,7 +2570,7 @@
       "allenId": 1057,
       "name": "Gustatory areas",
       "abbreviation": "GU",
-      "difficulty": "hard",
+      "difficulty": "easy",
       "category": "cortex",
       "parentName": "Isocortex",
       "centroid_ccf": [
@@ -2714,7 +2714,7 @@
       "allenId": 436,
       "name": "Columns of the fornix",
       "abbreviation": "fx",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "fiber",
       "parentName": "Fiber tracts",
       "centroid_ccf": [
@@ -2730,7 +2730,7 @@
       "allenId": 603,
       "name": "Fimbria",
       "abbreviation": "fi",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "fiber",
       "parentName": "Fiber tracts",
       "centroid_ccf": [
@@ -2890,7 +2890,7 @@
       "allenId": 1123,
       "name": "Inferior cerebellar peduncle",
       "abbreviation": "icp",
-      "difficulty": "hard",
+      "difficulty": "medium",
       "category": "fiber",
       "parentName": "Fiber tracts",
       "centroid_ccf": [
