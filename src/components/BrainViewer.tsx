@@ -85,7 +85,7 @@ export function BrainViewer({ targetRegion, guesses }: BrainViewerProps) {
   return (
     <div className="w-full h-full rounded-xl overflow-hidden" style={{ background: '#0d0f14' }}>
       <Canvas
-        camera={{ position: [-107, 20, -160], fov: 45 }}
+        camera={{ position: [0, 0, 500], fov: 45 }}
         gl={{ antialias: true, alpha: false }}
       >
         <ambientLight intensity={0.6} />
@@ -106,7 +106,7 @@ export function BrainViewer({ targetRegion, guesses }: BrainViewerProps) {
           target={[0, 0, 0]}
         />
 
-        <group rotation={CCF_TO_THREEJS}>
+        <group rotation={[Math.PI, 0, 0]}>
           <Suspense fallback={null}>
             <Center>
               {/* Ghost brain outline */}
