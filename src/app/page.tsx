@@ -47,7 +47,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col bg-lab-bg">
       <Header />
-      <main className="flex-1 flex flex-col items-center px-4 py-6 gap-5 max-w-7xl mx-auto w-full">
+      <main className="flex-1 flex flex-col items-center px-4 py-4 gap-4 max-w-7xl mx-auto w-full">
 
         {/* Mode + difficulty controls */}
         <div className="w-full flex flex-col items-center gap-3">
@@ -66,27 +66,7 @@ export default function HomePage() {
           <DifficultySelector value={game.difficulty} onChange={game.setDifficulty} disabled={false} />
         </div>
 
-        {/* Brain viewer — taller and wider */}
-        <div className="w-full" style={{ height: '520px' }}>
-          {game.loading ? (
-            <div className="w-full h-full flex items-center justify-center border border-lab-border rounded-lg">
-              <span className="text-synapse font-display text-xs tracking-widest animate-pulse">LOADING REGIONS...</span>
-            </div>
-          ) : game.error ? (
-            <div className="w-full h-full flex items-center justify-center border border-red-900 rounded-lg bg-red-950/20">
-              <p className="text-red-400 font-mono text-sm">{game.error}</p>
-            </div>
-          ) : game.targetRegion ? (
-            <BrainViewer
-              targetRegion={game.targetRegion}
-              guesses={game.guesses}
-              showGhostBrain={game.showGhostBrain}
-              showNeighbors={game.showNeighbors}
-            />
-          ) : null}
-        </div>
-
-        {/* Guess input */}
+        {/* Guess input — above brain viewer so it's visible without scrolling on mobile */}
         {!game.gameOver && (
           <div className="w-full">
             <GuessInput
@@ -109,6 +89,26 @@ export default function HomePage() {
             </div>
           </div>
         )}
+
+        {/* Brain viewer */}
+        <div className="w-full" style={{ height: '420px' }}>
+          {game.loading ? (
+            <div className="w-full h-full flex items-center justify-center border border-lab-border rounded-lg">
+              <span className="text-synapse font-display text-xs tracking-widest animate-pulse">LOADING REGIONS...</span>
+            </div>
+          ) : game.error ? (
+            <div className="w-full h-full flex items-center justify-center border border-red-900 rounded-lg bg-red-950/20">
+              <p className="text-red-400 font-mono text-sm">{game.error}</p>
+            </div>
+          ) : game.targetRegion ? (
+            <BrainViewer
+              targetRegion={game.targetRegion}
+              guesses={game.guesses}
+              showGhostBrain={game.showGhostBrain}
+              showNeighbors={game.showNeighbors}
+            />
+          ) : null}
+        </div>
 
         {/* Guess history */}
         <div className="w-full">

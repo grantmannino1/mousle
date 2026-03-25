@@ -17,7 +17,7 @@ export function Header() {
 
         <div className="text-center">
           <h1
-            style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, letterSpacing: '0.2em' }}
+            style={{ fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif', fontWeight: 700, letterSpacing: '0.2em' }}
             className="text-2xl text-synapse uppercase"
           >
             MOUSLE
