@@ -151,10 +151,11 @@ export function BrainViewer({ targetRegion, guesses, showGhostBrain }: BrainView
           dampingFactor={0.05}
           minDistance={50}
           maxDistance={20000}
-          zoomSpeed={0.6}
+          zoomSpeed={0.45}
           makeDefault
           autoRotate
-          autoRotateSpeed={0.8}
+          autoRotateSpeed={0.4}
+          enablePan={false}
         />
       </Canvas>
 
