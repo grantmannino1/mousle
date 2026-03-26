@@ -53,9 +53,10 @@ function GhostBrain() {
     c.traverse((child: any) => {
       if (child.isMesh) {
         child.material = new THREE.MeshStandardMaterial({
-          color: '#4488aa',
+          color: '#88ccee',
           transparent: true,
-          opacity: 0.12,
+          opacity: 0.22,
+          emissiveIntensity: 0.15,
           side: THREE.FrontSide,
           depthWrite: false,
         });

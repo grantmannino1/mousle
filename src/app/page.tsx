@@ -61,7 +61,9 @@ export default function HomePage() {
               className={"px-4 py-1.5 rounded font-display text-xs tracking-widest border transition-all " + (game.mode === 'training' ? 'border-yellow-400 text-yellow-400 bg-white/5' : 'border-lab-border text-gray-500 hover:border-gray-500')}
             >TRAINING</button>
           </div>
-          {game.mode === 'daily' && <p className="text-gray-600 font-mono text-xs tracking-widest">PUZZLE #{puzzleNum}</p>}
+          {game.mode === 'daily' && <p className="text-gray-600 font-mono text-xs tracking-widest">
+            {new Date().toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' })}
+          </p>}
           {game.mode === 'training' && <p className="text-yellow-500/60 font-mono text-xs tracking-widest">TRAINING MODE — unlimited puzzles</p>}
           <DifficultySelector value={game.difficulty} onChange={game.setDifficulty} disabled={false} />
         </div>

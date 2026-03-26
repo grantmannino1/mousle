@@ -32,8 +32,8 @@ export function GuessInput({
 
   // Memoize pool so it doesn't create a new array reference on every render
   const pool = useMemo(
-    () => filterByDifficulty(allRegions, difficulty),
-    [allRegions, difficulty]
+    () => allRegions,
+    [allRegions]
   );
 
   // Memoize alreadyGuessed as a Set for fast lookup
@@ -109,7 +109,7 @@ export function GuessInput({
           placeholder={
             disabled
               ? 'Game over'
-              : `Type a brain region... (${pool.length} regions)`
+              : 'Type a brain region...'
           }
           autoComplete="off"
           spellCheck={false}
