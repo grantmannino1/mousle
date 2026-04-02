@@ -93,7 +93,7 @@ function Scene({ targetRegion, guesses, showGhostBrain }: SceneProps) {
       <Environment preset="studio" />
 
       {/* margin reduced from 1.4 → 0.8 to make the brain bigger on screen */}
-      <Bounds fit clip observe margin={0.8} center>
+      <Bounds fit clip observe margin={0.8}>
         <group rotation={[Math.PI, 0, 0]}>
           {showGhostBrain && <GhostBrain />}
 
