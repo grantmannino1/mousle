@@ -92,8 +92,8 @@ function Scene({ targetRegion, guesses, showGhostBrain }: SceneProps) {
       <pointLight position={[0, 0, 10]} intensity={0.5} color="#4af0c4" />
       <Environment preset="studio" />
 
-      {/* Bounds auto-fits the camera to the content after load */}
-      <Bounds fit clip observe margin={1.4}>
+      {/* margin reduced from 1.4 → 0.8 to make the brain bigger on screen */}
+      <Bounds fit clip observe margin={0.8} center>
         <group rotation={[Math.PI, 0, 0]}>
           {showGhostBrain && <GhostBrain />}
 
@@ -156,6 +156,7 @@ export function BrainViewer({ targetRegion, guesses, showGhostBrain }: BrainView
           autoRotate
           autoRotateSpeed={0.4}
           enablePan={false}
+          target={[0, 0, 0]}
         />
       </Canvas>
 
