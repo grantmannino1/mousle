@@ -2,7 +2,7 @@
 
 import { Suspense, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, Bounds, useGLTF, Html } from '@react-three/drei';
+import { OrbitControls, Environment, Bounds, useGLTF, Html, Center } from '@react-three/drei';
 import * as THREE from 'three';
 import type { Region, GuessResult } from '@/types';
 
@@ -92,32 +92,33 @@ function Scene({ targetRegion, guesses, showGhostBrain }: SceneProps) {
       <pointLight position={[0, 0, 10]} intensity={0.5} color="#4af0c4" />
       <Environment preset="studio" />
 
-      {/* margin reduced from 1.4 → 0.8 to make the brain bigger on screen */}
       <Bounds fit clip observe margin={0.8}>
-        <group rotation={[Math.PI, 0, 0]}>
-          {showGhostBrain && <GhostBrain />}
+        <Center>
+          <group rotation={[Math.PI, 0, 0]}>
+            {showGhostBrain && <GhostBrain />}
 
-          {incorrectGuesses.map((g) => {
-            const { color, emissive } = proximityToColor(g.proximity_pct);
-            return (
-              <RegionMesh
-                key={g.region.id}
-                allenId={g.region.allenId}
-                color={color}
-                emissive={emissive}
-                emissiveIntensity={0.2}
-                opacity={0.5}
-              />
-            );
-          })}
+            {incorrectGuesses.map((g) => {
+              const { color, emissive } = proximityToColor(g.proximity_pct);
+              return (
+                <RegionMesh
+                  key={g.region.id}
+                  allenId={g.region.allenId}
+                  color={color}
+                  emissive={emissive}
+                  emissiveIntensity={0.2}
+                  opacity={0.5}
+                />
+              );
+            })}
 
-          <RegionMesh
-            allenId={targetRegion.allenId}
-            color={isFiber ? '#ffffff' : '#f06060'}
-            emissive={isFiber ? '#aaaaff' : '#f03030'}
-            emissiveIntensity={0.4}
-          />
-        </group>
+            <RegionMesh
+              allenId={targetRegion.allenId}
+              color={isFiber ? '#ffffff' : '#f06060'}
+              emissive={isFiber ? '#aaaaff' : '#f03030'}
+              emissiveIntensity={0.4}
+            />
+          </group>
+        </Center>
       </Bounds>
     </>
   );
