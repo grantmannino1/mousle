@@ -1,6 +1,6 @@
 # 🧠 MouseWordle
 
-A daily mouse brain neuroanatomy guessing game, inspired by Wordle (New York Times) and Neurdle by Xander Atalay.
+A daily mouse brain neuroanatomy guessing game, inspired by Wordle and Mousle by Xander Atalay.
 
 Players identify a mystery 3D brain region from the **Allen Mouse Brain Atlas CCFv3**, receiving feedback on:
 - **Distance** in mm from their guess to the target
