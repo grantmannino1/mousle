@@ -91,7 +91,7 @@ export default function HomePage() {
         )}
 
         {/* Brain viewer */}
-        <div className="w-full" style={{ height: '500px' }}>
+        <div className="w-full" style={{ height: '70vh' }}>
           {game.loading ? (
             <div className="w-full h-full flex items-center justify-center border border-lab-border rounded-lg">
               <span className="text-synapse font-display text-xs tracking-widest animate-pulse">LOADING REGIONS...</span>
